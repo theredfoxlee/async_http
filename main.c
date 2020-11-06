@@ -11,18 +11,17 @@ main() {
     async_http_request_t *request = async_http_request_init(attr);
     async_http_request_state_t state = async_http_request_run(request);
 
-    if (ASYNC_HTTP_REQUEST_RUNNING == state) {
-        do {
-            // do things in the meantime
-            //fprintf(stderr, "Hi.\n");
-            state = async_http_request_wait(request, 10);
-        } while (ASYNC_HTTP_REQUEST_RUNNING == state);
+    while (ASYNC_HTTP_REQUEST_RUNNING == state) {
+        // do things in the meantime
+        state = async_http_request_wait(request, 10);
     }
 
     if (ASYNC_HTTP_REQUEST_DONE == state) {
         fprintf(stderr, "response code: %ld\n", async_http_request_getresponsecode(request));
         fprintf(stderr, "response: %s\n", async_http_request_getresponse(request));
         fprintf(stderr, "total time: %g\n", async_http_request_gettotaltime(request));
+    } else {
+        fprintf(stderr, "async_http failed with state: %d\n", state);
     }
 
     async_http_request_destroy(request);
