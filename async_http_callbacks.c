@@ -11,7 +11,7 @@ struct async_http_callbacks_response {
 size_t async_http_callbacks_write(void *contents, size_t size, size_t nmemb, void *userp) {
     async_http_callbacks_response_t *data = (async_http_callbacks_response_t *) userp;
     size_t real_size = size * nmemb;
-    
+
     char *ptr = async_http_utils_realloc(data->data, data->size + real_size + 1);
 
     data->data = ptr;

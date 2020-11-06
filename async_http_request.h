@@ -7,25 +7,18 @@ typedef struct async_http_attr async_http_attr_t;
 struct async_http_request;
 typedef struct async_http_request async_http_request_t;
 
-enum async_http_request_exit {
-    ASYNC_HTTP_REQUEST_OK = 0,
-    ASYNC_HTTP_REQUEST_FAILED_TO_START = 1,
-};
-
-typedef enum async_http_request_exit async_http_request_exit_t;
-
 enum async_http_request_state {
-    ASYNC_GET_REQ_RUNNING = 1,
-    ASYNC_GET_REQ_COMPLETED = 2,
-    ASYNC_GET_REQ_TIMEOUTED = 3,
-    ASYNC_GET_REQ_FAILED = 4,
+	ASYNC_HTTP_REQUEST_DONE = 0,
+	ASYNC_HTTP_REQUEST_RUNNING = 1,
+	ASYNC_HTTP_REQUEST_FAILED = 2,
+	ASYNC_HTTP_REQUEST_NOT_STARTED = 3
 };
 
 typedef enum async_http_request_state async_http_request_state_t;
 
 async_http_request_t *async_http_request_init(async_http_attr_t *attr);
 
-async_http_request_exit_t async_http_request_run(async_http_request_t *request);
+async_http_request_state_t async_http_request_run(async_http_request_t *request);
 async_http_request_state_t async_http_request_wait(async_http_request_t *request, int timeout);
 
 const char * async_http_request_getresponse(async_http_request_t *request);

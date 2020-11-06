@@ -12,4 +12,7 @@ async_http_callbacks_response_t *async_http_callbacks_response_init(void);
 const char * async_http_callbacks_response_getresponse(async_http_callbacks_response_t *response);
 void async_http_callbacks_response_destroy(async_http_callbacks_response_t *response);
 
+
+void print_size(async_http_callbacks_response_t *response );
+
 #endif // _ASYNC_HTTP_CALLBACKS_

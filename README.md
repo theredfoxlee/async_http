@@ -13,35 +13,35 @@ While using most of async_http_* functions, you can be sure that they succeed (n
 ## usage
 
 ```c
-#include "async_get_attr.h"
-#include "async_get_request.h"
+#include "async_http_request.h"
+#include "async_http_attr.h"
 
 #include <stdio.h>
 
 int
 main() {
-    async_get_attr_t *attr = async_get_attr_init();
+    async_http_attr_t *attr = async_http_attr_init();
+    async_http_attr_seturl(attr, "http://localhost:8000/REVIEW.txt");
 
-    async_get_attr_seturl(attr, "htpp://google.com");
-    async_get_attr_setproxy(attr, "htpp://proxy.com:3389");
+    async_http_request_t *request = async_http_request_init(attr);
+    async_http_request_state_t state = async_http_request_run(request);
 
-    async_get_request_t *request = async_get_request_init(attr);
-
-    if (ASYNC_GET_REQUEST_OK == async_get_request_run(request)) {
+    if (ASYNC_HTTP_REQUEST_RUNNING == state) {
         do {
             // do things in the meantime
-        } while (ASYNC_GET_REQUEST_RUNNING == async_get_request_wait(req, 10));
-        
-        if (ASYNC_GET_REQUEST_COMPLETED == async_get_request_getstate(req)) {
-            fprintf(stderr, "http status: %u\n", async_get_request_gethttpstatus(req));
-            fprintf(stderr, "total time: %u\n", async_get_request_gettotaltime(req));
-            fprintf(stderr, "response: %s\n", async_get_request_getresponse(req));
-        }
+            //fprintf(stderr, "Hi.\n");
+            state = async_http_request_wait(request, 10);
+        } while (ASYNC_HTTP_REQUEST_RUNNING == state);
     }
-    
-    async_get_request_destroy(request);
 
-    async_get_attr_destroy(attr);
+    if (ASYNC_HTTP_REQUEST_DONE == state) {
+        fprintf(stderr, "response code: %ld\n", async_http_request_getresponsecode(request));
+        fprintf(stderr, "response: %s\n", async_http_request_getresponse(request));
+        fprintf(stderr, "total time: %g\n", async_http_request_gettotaltime(request));
+    }
+
+    async_http_request_destroy(request);
+    async_http_attr_destroy(attr);
 }
 ```
 
