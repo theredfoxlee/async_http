@@ -1,24 +1,34 @@
-.PHONY: all clean
+CC          ?= gcc
+RM          := rm -rf
+RMDIR       := rmdir
+MKDIR       := mkdir -p
 
-all: main
+TARGET      := $(shell basename $(CURDIR))
+SRCDIR      := src
+OBJDIR      := obj
 
-main: main.o async_http_utils.o async_http_attr.o async_http_callbacks.o async_http_request.o
-	gcc -lcurl -Wall -pedantic -o $@ $^
+CFLAGS      := -Wall -Wextra -pedantic
 
-async_http_utils.o: async_http_utils.c async_http_utils.h
-	gcc -Wall -pedantic -o $@ -c $<
+SRC         := $(shell find $(SRCDIR) -type f -name '*.c')
+OBJ         := $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRC:.c=.o))
+DEP         := $(OBJ:.o=.d)
+EXE         := $(OBJDIR)/async_http_example
 
-async_http_attr.o: async_http_attr.c async_http_attr.h async_http_utils.h
-	gcc -Wall -pedantic -o $@ -c $<
+-include $(DEP)
 
-async_http_callbacks.o: async_http_callbacks.c async_http_callbacks.h async_http_utils.h
-	gcc -Wall -pedantic -o $@ -c $<
+.PHONY: all setup clean $(OBJDIR)
 
-async_http_request.o: async_http_request.c async_http_request.h async_http_utils.h
-	gcc -Wall -pedantic -o $@ -c $<
+all: $(OBJDIR) $(EXE)
 
-main.o: main.c async_http_attr.h async_http_utils.h
-	gcc -Wall -pedantic -o $@ -c $<
+$(OBJDIR):
+	$(MKDIR) $(OBJDIR)
+
+$(EXE): $(OBJ)
+	$(CC) $(CFLAGS) -lcurl -o $@ $^
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -c -MMD -MP -o $@ $<
 
 clean:
-	rm -f *.o main
+	$(RM) $(OBJ) $(DEP) $(EXE)
+	$(RM) $(OBJDIR)

@@ -4,9 +4,14 @@
 #include <stdio.h>
 
 int
-main() {
+main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s <url>\n", argv[0]);
+        return 1;
+    }
+
     async_http_attr_t *attr = async_http_attr_init();
-    async_http_attr_seturl(attr, "http://localhost:8000/REVIEW.txt");
+    async_http_attr_seturl(attr, argv[1]);
 
     async_http_request_t *request = async_http_request_init(attr);
     async_http_request_state_t state = async_http_request_run(request);
