@@ -2,6 +2,11 @@
 
 async_http - deadly simple C API for making asynchronous HTTP requests.
 
+## requirements
+
+- **libcurl** (at least in version 7.28.0; see [how to get curl on your distro](https://ec.haxx.se/get-curl/get-curl-linux))
+- **gcc** (tested on version 10.2.0)
+
 ## notes
 
 async_http API uses abort() policy when memory fails to be allocated in some glib functions or some libcurl internal error happens.
