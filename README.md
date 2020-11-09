@@ -7,6 +7,11 @@ async_http - deadly simple C API for making asynchronous HTTP requests.
 - **libcurl** (at least in version 7.28.0; see [how to get curl on your distro](https://ec.haxx.se/get-curl/get-curl-linux))
 - **gcc** (tested on version 10.2.0)
 
+## docs for API
+
+- [async_http_request_t](./src/async_http_request.h) - async request "class"
+- [async_http_attr_t](./src/async_attr_request.h) - attributes
+
 ## usage
 
 ```c
