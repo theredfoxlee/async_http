@@ -13,7 +13,7 @@ main(int argc, char *argv[]) {
     async_http_attr_seturl(attr, argv[1]);
 
     async_http_request_t *request = async_http_request_init(attr);
-    async_http_request_state_t state = async_http_request_run(request);
+    async_http_request_state_t state = async_http_request_start(request);
 
     while (ASYNC_HTTP_REQUEST_RUNNING == state) {
         // do things in the meantime

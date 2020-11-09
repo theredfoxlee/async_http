@@ -30,9 +30,11 @@ CURLM *async_http_utils_curl_multi_init(void);
 void async_http_utils_curl_easy_setopt(CURL *handle, CURLoption option, ...);
 void async_http_utils_curl_easy_getinfo(CURL *handle,  CURLINFO info, ...);
 void async_http_utils_curl_multi_add_handle(CURLM *multi_handle, CURL *easy_handle);
+void async_http_utils_curl_multi_remove_handle(CURLM *multi_handle, CURL *easy_handle);
 
 void *async_http_utils_malloc(size_t size);
 void *async_http_utils_realloc(void *ptr, size_t size);
 char *async_http_utils_strdup(const char *s);
+void async_http_utils_free(void *ptr);
 
 #endif  // _ASYNC_HTTP_UTILS_

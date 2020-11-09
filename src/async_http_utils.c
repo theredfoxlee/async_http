@@ -40,20 +40,33 @@ void async_http_utils_curl_multi_add_handle(CURLM *multi_handle, CURL *easy_hand
     async_http_utils_assert(CURLM_OK == code, "curl_multi_add_handle(): %s", curl_multi_strerror(code));
 }
 
+void async_http_utils_curl_multi_remove_handle(CURLM *multi_handle, CURL *easy_handle) {
+    CURLMcode code = curl_multi_remove_handle(multi_handle, easy_handle);
+    async_http_utils_assert(CURLM_OK == code, "curl_multi_remove_handle(): %s", curl_multi_strerror(code));
+}
+
 void *async_http_utils_malloc(size_t size) {
     void *general_pointer = malloc(size);
+    //fprintf(stderr, "malloc(%lu) -> %p\n", size, general_pointer);
     async_http_utils_assert(NULL != general_pointer, "malloc(): %s", strerror(errno));
     return general_pointer;
 }
 
 void *async_http_utils_realloc(void *ptr, size_t size) {
     void *general_pointer = realloc(ptr, size);
+    //fprintf(stderr, "realloc(%p, %lu) -> %p\n", ptr, size, general_pointer);
     async_http_utils_assert(NULL != general_pointer, "realloc(): %s", strerror(errno));
     return general_pointer;
 }
 
 char *async_http_utils_strdup(const char *s) {
     char *duplicated_string = strdup(s);
+    //fprintf(stderr, "strdup(%s) -> %p\n", s, duplicated_string);
     async_http_utils_assert(NULL != duplicated_string, "strdup(): %s", strerror(errno));
     return duplicated_string;
+}
+
+void async_http_utils_free(void *ptr) {
+    //fprintf(stderr, "free(%p)\n", ptr);
+    free(ptr);
 }

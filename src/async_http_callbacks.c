@@ -41,6 +41,6 @@ const char * async_http_callbacks_response_getresponse(const async_http_callback
 }
 
 void async_http_callbacks_response_destroy(async_http_callbacks_response_t *response) {
-	free(response->data);
-	free(response);
+	async_http_utils_free(response->data);
+	async_http_utils_free(response);
 }

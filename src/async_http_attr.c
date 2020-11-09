@@ -18,7 +18,7 @@ async_http_attr_t * async_http_attr_init(void) {
 }
 
 void async_http_attr_seturl(async_http_attr_t *attr, const char *url) {
-    free(attr->url);
+    async_http_utils_free(attr->url);
     attr->url = async_http_utils_strdup(url);
 }
 const char * async_http_attr_geturl(const async_http_attr_t *attr) {
@@ -26,7 +26,7 @@ const char * async_http_attr_geturl(const async_http_attr_t *attr) {
 }
 
 void async_http_attr_setproxy(async_http_attr_t *attr, const char *proxy) {
-    free(attr->proxy);
+    async_http_utils_free(attr->proxy);
     attr->proxy = async_http_utils_strdup(proxy);
 }
 const char * async_http_attr_getproxy(const async_http_attr_t *attr) {
@@ -34,7 +34,7 @@ const char * async_http_attr_getproxy(const async_http_attr_t *attr) {
 }
 
 void async_http_attr_destroy(async_http_attr_t *attr) {
-    free(attr->url);
-    free(attr->proxy);
-    free(attr);
+    async_http_utils_free(attr->url);
+    async_http_utils_free(attr->proxy);
+    async_http_utils_free(attr);
 }
