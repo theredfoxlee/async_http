@@ -21,10 +21,10 @@ async_http_request_t *async_http_request_init(async_http_attr_t *attr);
 async_http_request_state_t async_http_request_run(async_http_request_t *request);
 async_http_request_state_t async_http_request_wait(async_http_request_t *request, int timeout);
 
-const char * async_http_request_getresponse(async_http_request_t *request);
-long async_http_request_getresponsecode(async_http_request_t *request);
-double async_http_request_gettotaltime(async_http_request_t *request);
-async_http_request_state_t async_http_request_getstate(async_http_request_t *request);
+const char * async_http_request_getresponse(const async_http_request_t *request);
+long async_http_request_getresponsecode(const async_http_request_t *request);
+double async_http_request_gettotaltime(const async_http_request_t *request);
+async_http_request_state_t async_http_request_getstate(const async_http_request_t *request);
 
 void async_http_request_destroy(async_http_request_t *request);
 

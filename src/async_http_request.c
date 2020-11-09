@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #include <curl/curl.h>
 
@@ -17,6 +18,8 @@ struct async_http_request {
 
 static void _async_http_request_init_internal(async_http_request_t *request, async_http_attr_t *attr);
 static void _async_http_request_destroy_internal(async_http_request_t *request);
+
+static long long _get_current_timestamp_ms(void);
 
 async_http_request_t *async_http_request_init(async_http_attr_t *attr) {
     async_http_request_t *new_request = (async_http_request_t *) async_http_utils_malloc(
@@ -64,18 +67,8 @@ async_http_request_state_t async_http_request_run(async_http_request_t *request)
     return ASYNC_HTTP_REQUEST_RUNNING;
 }
 
-#include <sys/time.h>
-
-static long long now(void) {
-    struct timeval te; 
-    gettimeofday(&te, NULL); // get current time
-    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
-    // printf("milliseconds: %lld\n", milliseconds);
-    return milliseconds;
-}
-
 async_http_request_state_t async_http_request_wait(async_http_request_t *request, int timeout_ms) {
-    const long long end_timestamp = now() + timeout_ms;
+    const long long end_timestamp = _get_current_timestamp_ms() + timeout_ms;
 
     while (1) {
         async_http_request_state_t ret = async_http_request_run(request);
@@ -92,7 +85,7 @@ async_http_request_state_t async_http_request_wait(async_http_request_t *request
             return ASYNC_HTTP_REQUEST_FAILED;
         }
 
-        if (end_timestamp <= now()) {
+        if (end_timestamp <= _get_current_timestamp_ms()) {
             if (1 == numfds) {
                 return async_http_request_run(request);
             }
@@ -103,24 +96,24 @@ async_http_request_state_t async_http_request_wait(async_http_request_t *request
     return ASYNC_HTTP_REQUEST_RUNNING;
 }
 
-const char * async_http_request_getresponse(async_http_request_t *request) {
+const char * async_http_request_getresponse(const async_http_request_t *request) {
     return async_http_callbacks_response_getresponse(request->response);
 }
 
-long async_http_request_getresponsecode(async_http_request_t *request) {
+long async_http_request_getresponsecode(const async_http_request_t *request) {
     long response_code;
     async_http_utils_curl_easy_getinfo(request->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
     return response_code;
 }
 
-double async_http_request_gettotaltime(async_http_request_t *request) {
+double async_http_request_gettotaltime(const async_http_request_t *request) {
     double total_time;
     async_http_utils_curl_easy_getinfo(request->easy_handle, CURLINFO_TOTAL_TIME, &total_time);
     return total_time;
 }
 
-async_http_request_state_t async_http_request_getstate(async_http_request_t *request) {
-    return async_http_request_run(request);  // dirty hack, don't tell anyone
+async_http_request_state_t async_http_request_getstate(const async_http_request_t *request) {
+    return async_http_request_run((async_http_request_t *) request);  // dirty hack, don't tell anyone
 }
 
 void async_http_request_destroy(async_http_request_t *request) {
@@ -148,4 +141,11 @@ static void _async_http_request_destroy_internal(async_http_request_t *request) 
     curl_easy_cleanup(request->easy_handle);
     curl_multi_cleanup(request->multi_handle);
     async_http_callbacks_response_destroy(request->response);
+}
+
+static long long _get_current_timestamp_ms(void) {
+    struct timeval te; 
+    gettimeofday(&te, NULL); // get current time
+    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+    return milliseconds;
 }

@@ -36,7 +36,7 @@ async_http_callbacks_response_t *async_http_callbacks_response_init(void) {
     return new_response;
 }
 
-const char * async_http_callbacks_response_getresponse(async_http_callbacks_response_t *response) {
+const char * async_http_callbacks_response_getresponse(const async_http_callbacks_response_t *response) {
 	return response->data;
 }
 

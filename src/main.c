@@ -1,5 +1,4 @@
-#include "async_http_request.h"
-#include "async_http_attr.h"
+#include "async_http.h"
 
 #include <stdio.h>
 
