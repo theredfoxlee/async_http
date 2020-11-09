@@ -10,7 +10,7 @@ async_http - deadly simple C API for making asynchronous HTTP requests.
 ## docs for API
 
 - [async_http_request_t](./src/async_http_request.h) - async request "class"
-- [async_http_attr_t](./src/async_attr_request.h) - attributes
+- [async_http_attr_t](./src/async_htpp_attr.h) - attributes
 
 ## usage
 
