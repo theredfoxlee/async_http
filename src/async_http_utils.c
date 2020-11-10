@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+//#include <stdio.h>
 
 CURL *async_http_utils_curl_easy_init(void) {
     CURL *easy_handle = curl_easy_init();
@@ -18,11 +19,14 @@ CURLM *async_http_utils_curl_multi_init(void) {
     async_http_utils_assert(NULL != multi_handle, "curl_multi_init(): Out of memory");
     return multi_handle;
 }
-#include <stdio.h>
+
 void async_http_utils_curl_easy_setopt(CURL *handle, CURLoption option, ...) {
     va_list args;
     va_start(args, option);
-    CURLcode code = curl_easy_setopt(handle, option, va_arg(args, void *));
+    /* Type of this parameter does not really matters here,
+       since it will be guessed again inside libcurl. */
+    void *param = va_arg(args, void *);
+    CURLcode code = curl_easy_setopt(handle, option, param);
     va_end(args);
     async_http_utils_assert(CURLE_OK == code, "curl_easy_setopt(): %s", curl_easy_strerror(code));
 }
@@ -30,9 +34,12 @@ void async_http_utils_curl_easy_setopt(CURL *handle, CURLoption option, ...) {
 void async_http_utils_curl_easy_getinfo(CURL *handle,  CURLINFO info, ...) {
     va_list args;
     va_start(args, info);
-    CURLcode code = curl_easy_getinfo(handle, info, va_arg(args, void *));
+    /* Type of this parameter does not really matters here,
+       since it will be guessed again inside libcurl. */
+    void *param = va_arg(args, void *);
+    CURLcode code = curl_easy_getinfo(handle, info, param);
     va_end(args);
-    async_http_utils_assert(CURLE_OK == code, "curl_easy_setopt(): %s", curl_easy_strerror(code));
+    async_http_utils_assert(CURLE_OK == code, "curl_easy_getinfo(): %s", curl_easy_strerror(code));
 }
 
 void async_http_utils_curl_multi_add_handle(CURLM *multi_handle, CURL *easy_handle) {

@@ -108,6 +108,14 @@ double async_http_request_gettotaltime(const async_http_request_t *request);
 async_http_request_state_t async_http_request_getstate(const async_http_request_t *request);
 
 /**
+ * Get last connected host ip.
+ *
+ * @param request async_http_request_t object
+ * @return an IP of last connected host
+ */
+const char *async_http_request_gethostip(const async_http_request_t *request);
+
+/**
  * Destroy async_http_request_t object.
  *
  * This function cleans up internal structures of async_http_request_t and cancels

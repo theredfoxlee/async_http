@@ -81,6 +81,12 @@ async_http_request_state_t async_http_request_getstate(const async_http_request_
     return request->state;
 }
 
+const char *async_http_request_gethostip(const async_http_request_t *request) {
+    char *ip = NULL;
+    async_http_utils_curl_easy_getinfo(request->easy_handle, CURLINFO_PRIMARY_IP, &ip);
+    return (const char *) ip;
+}
+
 void async_http_request_destroy(async_http_request_t *request) {
     _async_http_request_destroy_internal(request);
     async_http_utils_free(request);

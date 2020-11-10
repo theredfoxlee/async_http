@@ -41,6 +41,7 @@ main(int argc, char *argv[]) {
         fprintf(stderr, "response code: %ld\n", async_http_request_getresponsecode(request));
         fprintf(stderr, "response: %s\n", async_http_request_getresponse(request));
         fprintf(stderr, "total time: %g\n", async_http_request_gettotaltime(request));
+        fprintf(stderr, "server ip: %s\n", async_http_request_gethostip(request));
     } else {
         fprintf(stderr, "async_http failed with state: %d\n", state);
     }
@@ -48,7 +49,6 @@ main(int argc, char *argv[]) {
     async_http_request_destroy(request);
     async_http_attr_destroy(attr);
 }
-
 ```
 
 ## notes
